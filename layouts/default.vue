@@ -1,20 +1,19 @@
 <template>
-  <div>
+  <div class="h-full">
     <Nuxt />
   </div>
 </template>
 
 <style>
+html,
+body,
+#__nuxt,
+#__layout {
+  height: 100%;
+}
 html {
-  font-family:
-    'Source Sans Pro',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    'Helvetica Neue',
-    Arial,
-    sans-serif;
+  font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   font-size: 16px;
   word-spacing: 1px;
   -ms-text-size-adjust: 100%;
