@@ -1,21 +1,110 @@
 <template>
-  <div class="h-full flex flex-col justify-center items-center">
-    <h1 class="text-4xl font-lato font-bold mb-2">Em Construção</h1>
-    <img
-      class="mb-2"
-      src="https://i.ibb.co/pXCw5F6/image.png"
-      alt="Machamp"
-      srcset=""
-    />
-    <p class="text-2xl font-lato text-center">
-      Machamps trabalhando aqui. <br />
-      Em breve site pronto
-    </p>
+  <div class="h-full flex flex-col">
+    <div class="flex justify-center mb-10">
+      <h1 class="text-4xl font-lato font-bold mb-2 uppercase">PokeAgenda</h1>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 justify-items-center mb-8">
+      <card @click="handleCard('pokemon')" class="cursor-pointer">
+        <template v-slot:body>
+          <div class="h-full flex flex-col items-center justify-between">
+            <p class="mb-3 font-lato font-semibold text-2xl uppercase">
+              Pokémon
+            </p>
+            <img class="w-8/12 mb-3" :src="pokemon.sprite" />
+          </div>
+        </template>
+      </card>
+      <card @click="handleCard('battle')" class="cursor-pointer">
+        <template v-slot:body>
+          <div class="h-full flex flex-col items-center justify-center">
+            <p class="mb-3 font-lato font-semibold text-2xl uppercase">
+              Batalha
+            </p>
+            <img class="w-1/2" src="@/assets/vs.png" />
+          </div>
+        </template>
+      </card>
+      <card @click="handleCard('team')" class="cursor-pointer">
+        <template v-slot:body>
+          <div class="h-full flex flex-col items-center justify-center">
+            <p class="mb-3 font-lato font-semibold text-2xl uppercase">
+              Seu Time
+            </p>
+            <img
+              class="w-3/4"
+              src="https://static.wikia.nocookie.net/pokemon-fano/images/6/6f/Poke_Ball.png/revision/latest/scale-to-width-down/340?cb=20140520015336"
+            />
+          </div>
+        </template>
+      </card>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 justify-items-center">
+      <card
+        @click="handleCard('type')"
+        class="cursor-pointer"
+        width="175px"
+        height="175px"
+      >
+        <template v-slot:body>
+          <div class="h-full flex flex-col items-center justify-center">
+            <p class="mb-3 font-lato font-semibold text-2xl uppercase">Tipo</p>
+            <img
+              class="w-1/2"
+              :src="require(`~/assets/tipos/${pokemon.url}.png`)"
+            />
+          </div>
+        </template>
+      </card>
+      <card
+        @click="handleCard('about')"
+        class="cursor-pointer"
+        width="175px"
+        height="175px"
+      >
+        <template v-slot:body>
+          <div class="h-full flex flex-col items-center justify-center">
+            <p class="mb-3 font-lato font-semibold text-2xl uppercase">sobre</p>
+            <img class="w-1/2" src="@/assets/pokedex.png" />
+          </div>
+        </template>
+      </card>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-
-export default Vue.extend({});
+import { Component, Vue } from "vue-property-decorator";
+import card from "@/components/card.vue";
+import { types } from "@/utils/type";
+@Component({
+  components: {
+    card,
+  },
+})
+export default class Index extends Vue {
+  private pokemon: any = {
+    url: "planta",
+  };
+  async mounted() {
+    const index = Math.floor(Math.random() * (898 - 1)) + 1;
+    try {
+      const pkm = await this.$axios.$get(
+        `https://pokeapi.co/api/v2/pokemon/${index}`
+      );
+      this.pokemon = {
+        sprite:
+          pkm.sprites.other.dream_world.front_default ??
+          pkm.sprites.other["official-artwork"].front_default,
+        type: pkm.types[0].type.name,
+        url: types[pkm.types[0].type.name].namesimple,
+      };
+      console.log(this.pokemon);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  private handleCard(router: string): void {
+    this.$router.push(router);
+  }
+}
 </script>
