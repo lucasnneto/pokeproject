@@ -20,21 +20,21 @@
       </card>
       <card @click="handleCard('battle')" class="cursor-pointer">
         <template v-slot:body>
-          <div class="h-full flex flex-col items-center justify-center">
+          <div class="h-full flex flex-col items-center justify-between">
             <p class="mb-3 font-lato font-semibold text-2xl uppercase">
               Batalha
             </p>
-            <img class="w-1/2" src="@/assets/vs.png" />
+            <img class="w-1/2 mb-3" src="@/assets/vs.png" />
           </div>
         </template>
       </card>
       <card @click="handleCard('team')" class="cursor-pointer">
         <template v-slot:body>
-          <div class="h-full flex flex-col items-center justify-center">
+          <div class="h-full flex flex-col items-center justify-between">
             <p class="mb-3 font-lato font-semibold text-2xl uppercase">
               Seu Time
             </p>
-            <img class="w-3/4" src="~/assets/pokebola.png" />
+            <img class="w-3/4 mb-3" src="~/assets/pokebola.png" />
           </div>
         </template>
       </card>
@@ -47,10 +47,10 @@
         height="175px"
       >
         <template v-slot:body>
-          <div class="h-full flex flex-col items-center justify-center">
+          <div class="h-full flex flex-col items-center justify-between">
             <p class="mb-3 font-lato font-semibold text-2xl uppercase">Tipo</p>
             <img
-              class="w-3/5"
+              class="w-3/5 mb-3"
               :src="require(`~/assets/tipos/${pokemon.url}.png`)"
             />
           </div>
@@ -63,9 +63,9 @@
         height="175px"
       >
         <template v-slot:body>
-          <div class="h-full flex flex-col items-center justify-center">
+          <div class="h-full flex flex-col items-center justify-between">
             <p class="mb-3 font-lato font-semibold text-2xl uppercase">sobre</p>
-            <img class="w-1/2" src="@/assets/pokedex.png" />
+            <img class="w-1/2 mb-3" src="@/assets/pokedex.png" />
           </div>
         </template>
       </card>
@@ -99,7 +99,7 @@ export default class Index extends Vue {
         type: pkm.types[0].type.name,
         url: types[pkm.types[0].type.name].namesimple,
       };
-      console.log(this.pokemon);
+      // console.log(this.pokemon);
     } catch (e) {
       console.error(e);
     }
