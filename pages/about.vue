@@ -1,0 +1,17 @@
+<template>
+  <div class="h-full flex flex-col justify-between">
+    <header-base name="sobre" />
+    <img
+      src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/1.svg"
+    />
+    <div class="flex justify-center">
+      <p class="text-sm font-bold">Desenvolvido por: Lucas Neto Oliveira</p>
+    </div>
+  </div>
+</template>
+
+<script lang='ts'>
+import { Component, Vue } from "vue-property-decorator";
+@Component
+export default class Sobre extends Vue {}
+</script>

@@ -10,7 +10,11 @@
             <p class="mb-3 font-lato font-semibold text-2xl uppercase">
               Pokémon
             </p>
-            <img class="w-8/12 mb-3" :src="pokemon.sprite" />
+            <img
+              class="w-3/4 mb-3"
+              style="max-height: 160px !important"
+              :src="pokemon.sprite"
+            />
           </div>
         </template>
       </card>
@@ -30,10 +34,7 @@
             <p class="mb-3 font-lato font-semibold text-2xl uppercase">
               Seu Time
             </p>
-            <img
-              class="w-3/4"
-              src="https://static.wikia.nocookie.net/pokemon-fano/images/6/6f/Poke_Ball.png/revision/latest/scale-to-width-down/340?cb=20140520015336"
-            />
+            <img class="w-3/4" src="~/assets/pokebola.png" />
           </div>
         </template>
       </card>
@@ -49,7 +50,7 @@
           <div class="h-full flex flex-col items-center justify-center">
             <p class="mb-3 font-lato font-semibold text-2xl uppercase">Tipo</p>
             <img
-              class="w-1/2"
+              class="w-3/5"
               :src="require(`~/assets/tipos/${pokemon.url}.png`)"
             />
           </div>

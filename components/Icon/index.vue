@@ -1,14 +1,16 @@
 <template>
-  <component :is="name" v-bind="$props" />
+  <div v-on="$listeners">
+    <component :is="name" v-bind="$props" />
+  </div>
 </template>
 
 <script>
-import Loading from "./Loading";
+import DeletePoke from "./DeletePoke";
 import Close from "./Close";
 import Back from "./Back";
 export default {
   components: {
-    Loading,
+    DeletePoke,
     Close,
     Back,
   },
