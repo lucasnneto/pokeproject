@@ -1,9 +1,6 @@
 <template>
-  <div class="h-full flex flex-col justify-between">
-    <header-base name="lista pokemon" />
-    <img
-      src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/1.svg"
-    />
+  <div class="h-full flex flex-col justify-start">
+    <header-base class="mb-8" name="lista pokemon" />
   </div>
 </template>
 
