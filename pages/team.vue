@@ -16,6 +16,7 @@
           <img
             @click="handleClick(t.indice)"
             class="w-1/3 mb-2 cursor-pointer"
+            :style="t.sprite == '' ? '' : 'max-height: 115px'"
             :src="t.sprite == '' ? require(`~/assets/pokebola.png`) : t.sprite"
           />
           <p
@@ -27,17 +28,51 @@
         </div>
       </div>
     </div>
+    <modal :modal="modal" @closemodal="modal = false" @pokemon="addPoke" />
   </div>
 </template>
 
 <script lang='ts'>
 import { Component, Vue } from "vue-property-decorator";
-@Component
+import modal from "@/components/modal/Modal.vue";
+@Component({
+  components: {
+    modal,
+  },
+})
 export default class Team extends Vue {
   private team: Array<string> = [];
   private myteam: Array<any> = [];
+  private modal: boolean = false;
+  private async addPoke(indice: string): Promise<void> {
+    let find = this.team.findIndex((el) => {
+      return el == "-1";
+    });
+
+    this.team.splice(find, 1, indice);
+    find = this.myteam.findIndex((el) => {
+      return el.indice == "-1";
+    });
+    try {
+      const pkm = await this.$axios.$get(
+        `https://pokeapi.co/api/v2/pokemon/${indice}/`
+      );
+      const poke = {
+        sprite:
+          pkm.sprites.other.dream_world.front_default ??
+          pkm.sprites.other["official-artwork"].front_default,
+        nome: pkm.forms[0].name,
+        indice: indice,
+      };
+      this.myteam.splice(find, 1, poke);
+      localStorage.removeItem("pokeproject");
+      localStorage.setItem("pokeproject", JSON.stringify({ team: this.team }));
+    } catch (e) {
+      console.error(e);
+    }
+  }
   private handleClick(indice: string): void {
-    if (indice == "-1") console.log("add poke novo");
+    if (indice == "-1") this.modal = true;
     else console.log("ir para poke");
     // this.$router.push(`/pokemon/${indice}`);
   }
@@ -66,7 +101,7 @@ export default class Team extends Vue {
         if (element != "-1") {
           try {
             const pkm = await this.$axios.$get(
-              `https://pokeapi.co/api/v2/pokemon/${element}`
+              `https://pokeapi.co/api/v2/pokemon/${element}/`
             );
             const poke = {
               sprite:
@@ -91,12 +126,8 @@ export default class Team extends Vue {
       localStorage.removeItem("pokeproject");
       localStorage.setItem(
         "pokeproject",
-        JSON.stringify({ team: ["1", "10", "100", "200", "300", "-1"] })
+        JSON.stringify({ team: ["-1", "-1", "-1", "-1", "-1", "-1"] })
       );
-      // localStorage.setItem(
-      //   "pokeproject",
-      //   JSON.stringify({ team: ["-1", "-1", "-1", "-1", "-1", "-1"] })
-      // );
       for (let index = 0; index < 6; index++) {
         this.myteam.push({
           sprite: "",

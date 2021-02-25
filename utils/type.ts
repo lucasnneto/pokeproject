@@ -24,7 +24,7 @@ export const types: { [key: string]: any } = {
     name: "Voador",
     vantagem: ['fighting', 'bug', 'grass'],
     desvantagem: [
-      'ice', 'eletric', 'rock'
+      'ice', 'electric', 'rock'
     ],
     imunidade: [
       'ground'
@@ -43,12 +43,12 @@ export const types: { [key: string]: any } = {
   'ground': {
     namesimple: "terra",
     name: "Terra",
-    vantagem: ['poison', 'eletric', 'fire'],
+    vantagem: ['poison', 'electric', 'fire'],
     desvantagem: [
       'ice', 'grass', 'water'
     ],
     imunidade: [
-      'eletric'
+      'electric'
     ]
   },
   'rock': {
@@ -59,7 +59,7 @@ export const types: { [key: string]: any } = {
       'water', 'grass', 'steel', 'ground', 'fighting'
     ],
     imunidade: [
-      'eletric'
+      'electric'
     ]
   },
   'bug': {
@@ -107,7 +107,7 @@ export const types: { [key: string]: any } = {
     name: "Água",
     vantagem: ['fire', 'ground', 'rock'],
     desvantagem: [
-      'grass', 'eletric'
+      'grass', 'electric'
     ],
     imunidade: [
     ]
@@ -142,7 +142,7 @@ export const types: { [key: string]: any } = {
     imunidade: ['psychic'
     ]
   },
-  'eletric': {
+  'electric': {
     namesimple: "eletrico",
     name: "Elétrico",
     vantagem: ['water', 'flying'],

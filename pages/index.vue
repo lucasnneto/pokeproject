@@ -90,7 +90,7 @@ export default class Index extends Vue {
     const index = Math.floor(Math.random() * (898 - 1)) + 1;
     try {
       const pkm = await this.$axios.$get(
-        `https://pokeapi.co/api/v2/pokemon/${index}`
+        `https://pokeapi.co/api/v2/pokemon/${index}/`
       );
       this.pokemon = {
         sprite:

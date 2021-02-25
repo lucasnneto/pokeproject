@@ -2,9 +2,9 @@
   <div class="h-full flex flex-col justify-start">
     <header-base class="mb-10" name="Batalha" />
     <div v-if="battle" class="flex flex-col items-center">
-      <div class="mb-12 w-full flex justify-between items-center px-8">
+      <div class="mb-12 w-full flex justify-between items-center px-32">
         <div class="h-full flex flex-col items-center justify-center">
-          <div class="w-full flex justify-end pr-16">
+          <div class="w-full flex justify-end">
             <icon
               name="delete-poke"
               size="22"
@@ -14,8 +14,9 @@
             />
           </div>
           <img
-            @click="handleClick(pokemon0.indice)"
+            @click="handleClick(pokemon0.indice, 0)"
             class="mb-2 cursor-pointer"
+            style="max-height: 220px"
             :src="
               pokemon0.sprite == ''
                 ? require(`~/assets/pokebola.png`)
@@ -31,7 +32,7 @@
         </div>
         <img src="~/assets/vs.png" />
         <div class="h-full flex flex-col items-center justify-center">
-          <div class="w-full flex justify-end pr-16">
+          <div class="w-full flex justify-end">
             <icon
               name="delete-poke"
               size="22"
@@ -41,8 +42,9 @@
             />
           </div>
           <img
-            @click="handleClick(pokemon1.indice)"
+            @click="handleClick(pokemon1.indice, 1)"
             class="mb-2 cursor-pointer"
+            style="max-height: 220px"
             :src="
               pokemon1.sprite == ''
                 ? require(`~/assets/pokebola.png`)
@@ -59,7 +61,12 @@
       </div>
       <button
         @click="result"
-        class="w-56 h-12 flex items-center justify-center rounded-full bg-brand-main focus:outline-none hover:bg-gray-300"
+        :class="
+          pokemon0.indice != '-1' && pokemon1.indice != '-1'
+            ? 'bg-gray-500 hover:bg-gray-300'
+            : 'bg-gray-300'
+        "
+        class="w-56 h-12 flex items-center justify-center rounded-full focus:outline-none"
       >
         Go!
       </button>
@@ -102,6 +109,7 @@
         </button>
       </div>
     </div>
+    <modal :modal="modal" @closemodal="modal = false" @pokemon="addPoke" />
   </div>
 </template>
 
@@ -110,6 +118,8 @@ import { Component, Vue } from "vue-property-decorator";
 @Component
 export default class ListaPokemon extends Vue {
   private battle: boolean = true;
+  private modal: boolean = false;
+  private direction: number = -1;
   private pokemons: Array<object> = [];
   private pokemon0: object = {
     sprite: "",
@@ -121,13 +131,31 @@ export default class ListaPokemon extends Vue {
     indice: "-1",
     nome: "",
   };
+  private async addPoke(indice: string): Promise<void> {
+    try {
+      const pkm = await this.$axios.$get(
+        `https://pokeapi.co/api/v2/pokemon/${indice}/`
+      );
+      const poke = {
+        sprite:
+          pkm.sprites.other.dream_world.front_default ??
+          pkm.sprites.other["official-artwork"].front_default,
+        nome: pkm.forms[0].name,
+        indice: indice,
+      };
+      if (this.direction == 0) this.pokemon0 = poke;
+      if (this.direction == 1) this.pokemon1 = poke;
+    } catch (e) {
+      console.error(e);
+    }
+  }
   private result(): void {
     console.log("result");
     this.battle = false;
-    // this.$router.push(`/pokemon/${indice}`);
   }
-  private handleClick(indice: string): void {
-    if (indice == "-1") console.log("add poke novo");
+  private handleClick(indice: string, direction: number): void {
+    this.direction = direction;
+    if (indice == "-1") this.modal = true;
     // this.$router.push(`/pokemon/${indice}`);
   }
   private removePoke(indice: number): void {

@@ -1,11 +1,25 @@
 <template>
-  <div class="h-full flex flex-col justify-start">
-    <header-base class="mb-8" name="lista pokemon" />
-  </div>
+  <pokemon-list
+    class="overflow-hidden"
+    @back-close="back"
+    @pokemon="pokemonHandle"
+  />
 </template>
 
 <script lang='ts'>
 import { Component, Vue } from "vue-property-decorator";
-@Component
-export default class ListaPokemon extends Vue {}
+import pokemonList from "@/components/pokemonList.vue";
+@Component({
+  components: {
+    pokemonList,
+  },
+})
+export default class ListaPokemon extends Vue {
+  private back(): void {
+    this.$router.push("/");
+  }
+  private pokemonHandle(id: string): void {
+    console.log(id);
+  }
+}
 </script>
