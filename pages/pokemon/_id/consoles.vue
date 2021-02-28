@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col justify-between h-full">
+  <div class="flex flex-col justify-between h-full relative">
     <div class="flex flex-col items-center justify-center">
       <icon
         name="back"
@@ -25,13 +25,8 @@
         />
       </div>
       <div class="w-1/2 flex flex-col pl-24 overflow-y-auto">
-        <div
-          v-for="game in pokemon.games"
-          :key="game"
-          class="mb-5 flex items-center"
-        >
-          <img :src="require(`~/assets/games/${game}.png`)" class="h-24 mr-5" />
-          <p class="text-xl font-lato font-bold uppercase">{{ game }}</p>
+        <div v-for="game in pokemon.games" :key="game">
+          <game-card :game="game" />
         </div>
       </div>
     </div>
@@ -51,6 +46,7 @@ import { Component, Vue } from "vue-property-decorator";
 @Component
 export default class games extends Vue {
   private pokemon: any = {};
+
   private handleNavigate(route: string): void {
     this.$router.push(route);
   }
@@ -78,3 +74,4 @@ export default class games extends Vue {
   }
 }
 </script>
+
