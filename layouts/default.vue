@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full">
+  <div class="h-full p-5">
     <Nuxt />
   </div>
 </template>
