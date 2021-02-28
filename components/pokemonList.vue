@@ -106,7 +106,7 @@ export default class ListaPokemon extends Vue {
     try {
       const pkm = await this.$axios.$get("https://pokeapi.co/api/v2/pokemon/", {
         params: {
-          limit: 1118,
+          limit: 898,
         },
       });
       this.pokemons = pkm.results;
