@@ -94,6 +94,7 @@ export default class Team extends Vue {
     localStorage.setItem("pokeproject", JSON.stringify({ team: this.team }));
   }
   mounted() {
+    this.team = ["-1", "-1", "-1", "-1", "-1", "-1"];
     const pokeproject = JSON.parse(localStorage.getItem("pokeproject") || "{}");
     if (!!pokeproject?.team) {
       this.team = pokeproject.team;
@@ -124,10 +125,7 @@ export default class Team extends Vue {
       });
     } else {
       localStorage.removeItem("pokeproject");
-      localStorage.setItem(
-        "pokeproject",
-        JSON.stringify({ team: ["-1", "-1", "-1", "-1", "-1", "-1"] })
-      );
+      localStorage.setItem("pokeproject", JSON.stringify({ team: this.team }));
       for (let index = 0; index < 6; index++) {
         this.myteam.push({
           sprite: "",
