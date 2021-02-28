@@ -10,6 +10,9 @@ module.exports = {
     extend: {
       colors: palette
     },
+    scale: {
+      '300': '3',
+    },
     borderRadius: {
       'none': '0',
       'sm': '0.125rem',

@@ -1,7 +1,20 @@
 <template>
   <div class="h-full flex flex-col justify-start">
     <header-base class="mb-10" name="Batalha" />
-    <div v-if="battle" class="flex flex-col items-center">
+    <div class="h-full flex flex-col justify-center items-center">
+      <h1 class="text-4xl font-lato font-bold mb-2">Em Construção</h1>
+      <img
+        class="mb-2"
+        src="https://i.ibb.co/pXCw5F6/image.png"
+        alt="Machamp"
+        srcset=""
+      />
+      <p class="text-2xl font-lato text-center">
+        Machamps trabalhando aqui. <br />
+        Em breve modo de batalha estará pronto
+      </p>
+    </div>
+    <!-- <div v-if="battle" class="flex flex-col items-center">
       <div class="mb-12 w-full flex justify-between items-center px-32">
         <div class="h-full flex flex-col items-center justify-center">
           <div class="w-full flex justify-end">
@@ -108,7 +121,7 @@
           Tentar Novamente
         </button>
       </div>
-    </div>
+    </div> -->
     <modal :modal="modal" @closemodal="modal = false" @pokemon="addPoke" />
   </div>
 </template>

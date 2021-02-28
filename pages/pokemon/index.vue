@@ -19,7 +19,7 @@ export default class ListaPokemon extends Vue {
     this.$router.push("/");
   }
   private pokemonHandle(id: string): void {
-    console.log(id);
+    this.$router.push(`pokemon/${id}`);
   }
 }
 </script>
