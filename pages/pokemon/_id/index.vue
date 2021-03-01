@@ -40,7 +40,7 @@
       <img
         class="mb-3 absolute top-0"
         style="
-          max-height: 270px !important;
+          max-height: 200px !important;
           min-height: 170px !important;
           max-width: 350px !important;
         "
@@ -84,25 +84,34 @@
             </div>
             <div class="flex items-end justify-center w-1/3">
               <div
-                v-for="(evol, index) in evolutions"
-                class="flex"
-                :key="evol.id"
+                style="height: 50%"
+                class="w-full flex items-center justify-center"
               >
-                <icon
-                  name="back"
-                  v-show="index"
-                  color="#A9A9A9"
-                  class="transform rotate-180 flex items-center px-5"
-                />
-                <div @click="handlePokemon(evol.id)" class="cursor-pointer">
-                  <img
-                    style="
-                      min-height: 60px !important;
-                      max-height: 60px !important;
-                      min-width: 60 !important;
-                    "
-                    :src="evol.sprite"
-                  />
+                <div v-for="nivel in 3" class="flex flex-col" :key="nivel">
+                  <div
+                    v-for="evol in evolutions.filter(
+                      (el) => nivel - 1 == el.nivel
+                    )"
+                    :key="evol.id"
+                    class="flex"
+                  >
+                    <icon
+                      v-show="nivel - 1 != 0"
+                      name="back"
+                      color="#A9A9A9"
+                      class="transform rotate-180 flex items-center px-5"
+                    />
+                    <div @click="handlePokemon(evol.id)" class="cursor-pointer">
+                      <img
+                        style="
+                          min-height: 60px !important;
+                          max-height: 60px !important;
+                          min-width: 60px !important;
+                        "
+                        :src="evol.sprite"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -146,6 +155,7 @@ export default class id extends Vue {
   private types: { [key: string]: any } = types;
   private pokemon: any = {};
   private evolutions: Array<object> = [];
+  private nivel: number = 0;
   private handlePokemon(id: string): void {
     this.$router.push(`/pokemon/${id}`);
   }
@@ -167,14 +177,23 @@ export default class id extends Vue {
   private handleClickType(type: string): void {
     this.$router.push(`/type/${type}`);
   }
-  private getEvolution(poke: any) {
+  private getEvolution(poke: any, nivel: number) {
     this.evolutions.push({
       id: poke.species.url.split("/")[6],
       name: poke.species.name,
       sprite: "",
+      nivel,
     });
-    if (poke.evolves_to.length > 0) this.getEvolution(poke.evolves_to[0]);
-    else return;
+    if (poke.species.name == "eevee") return;
+    if (poke.evolves_to.length > 0) {
+      this.nivel++;
+      const lvl = this.nivel;
+      let i = 0;
+      while (i < poke.evolves_to.length) {
+        this.getEvolution(poke.evolves_to[i], nivel + 1);
+        i++;
+      }
+    } else return;
   }
   async mounted() {
     const id = this.$route.params.id;
@@ -187,8 +206,8 @@ export default class id extends Vue {
         `https://pokeapi.co/api/v2/pokemon-species/${id}/`
       );
       const { chain } = await this.$axios.$get(evolution_chain.url);
-      this.getEvolution(chain);
-      console.log(this.evolutions);
+      this.getEvolution(chain, 0);
+
       for (let index = 0; index < this.evolutions.length; index++) {
         const aux: any = this.evolutions[index];
         const pkm = await this.$axios.$get(
@@ -199,7 +218,6 @@ export default class id extends Vue {
           pkm.sprites.other["official-artwork"].front_default;
         this.evolutions[index] = aux;
       }
-
       const pkm = await this.$axios.$get(
         `https://pokeapi.co/api/v2/pokemon/${id}/`
       );
