@@ -61,7 +61,7 @@ export default class Pokemoncard extends Vue {
         this.pokemon.url[this.pokemon.url.length - 1] != "/"
           ? this.pokemon.url + "/"
           : this.pokemon.url;
-      const pkm = await this.$axios.$get(this.pokemon.url);
+      const pkm = await this.$axios.$get(newURL);
       this.pokemonDetalhes = {
         name: this.pokemon.name,
         id: pkm.id,

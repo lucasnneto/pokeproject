@@ -39,7 +39,11 @@
     >
       <img
         class="mb-3 absolute top-0"
-        style="max-height: 270px !important; min-height: 170px !important"
+        style="
+          max-height: 270px !important;
+          min-height: 170px !important;
+          max-width: 350px !important;
+        "
         :src="pokemon.sprite"
       />
       <icon
@@ -91,7 +95,14 @@
                   class="transform rotate-180 flex items-center px-5"
                 />
                 <div @click="handlePokemon(evol.id)" class="cursor-pointer">
-                  <img style="max-height: 60px !important" :src="evol.sprite" />
+                  <img
+                    style="
+                      min-height: 60px !important;
+                      max-height: 60px !important;
+                      min-width: 60 !important;
+                    "
+                    :src="evol.sprite"
+                  />
                 </div>
               </div>
             </div>
@@ -101,13 +112,13 @@
               </p>
               <div class="h-full flex flex-col items-center justify-center">
                 <button
-                  class="mb-3 font-lato font-bold uppercase focus:outline-none"
+                  class="mb-3 font-lato font-bold uppercase focus:outline-none p-2 rounded-md hover:bg-gray-300"
                   @click="handleNavigate(`/pokemon/${pokemon.id}/consoles`)"
                 >
                   Jogos
                 </button>
                 <button
-                  class="font-lato font-bold uppercase focus:outline-none"
+                  class="font-lato font-bold uppercase focus:outline-none p-2 rounded-md hover:bg-gray-300"
                   @click="handleNavigate(`/pokemon/${pokemon.id}/citys`)"
                 >
                   Cidades
@@ -177,6 +188,7 @@ export default class id extends Vue {
       );
       const { chain } = await this.$axios.$get(evolution_chain.url);
       this.getEvolution(chain);
+      console.log(this.evolutions);
       for (let index = 0; index < this.evolutions.length; index++) {
         const aux: any = this.evolutions[index];
         const pkm = await this.$axios.$get(
