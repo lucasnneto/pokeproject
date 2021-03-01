@@ -188,6 +188,7 @@ export default class id extends Vue {
       );
       const { chain } = await this.$axios.$get(evolution_chain.url);
       this.getEvolution(chain);
+      console.log(this.evolutions);
       for (let index = 0; index < this.evolutions.length; index++) {
         const aux: any = this.evolutions[index];
         const pkm = await this.$axios.$get(
