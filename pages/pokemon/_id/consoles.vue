@@ -25,9 +25,7 @@
         />
       </div>
       <div class="w-1/2 flex flex-col pl-24 overflow-y-auto">
-        <div v-for="game in pokemon.games" :key="game">
-          <game-card :game="game" />
-        </div>
+        <game-card v-for="game in pokemon.games" :key="game" :game="game" />
       </div>
     </div>
     <div class="flex justify-center">
