@@ -3,7 +3,7 @@
     <img
       v-if="hover"
       :src="require(`~/assets/games/${game}.png`)"
-      class="w-1/2 mr-5 transform scale-300 imgHover"
+      class="w-1/2 mr-5 transform scale-300 imgHover hidden md:block"
     />
     <img
       @mouseover="hover = true"

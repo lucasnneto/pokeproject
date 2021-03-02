@@ -1,7 +1,7 @@
 <template>
   <div class="h-full flex flex-col">
     <header-base name="tipos" />
-    <div class="mt-5 grid grid-cols-6">
+    <div class="mt-5 grid grid-cols-2 md:grid-cols-6">
       <div v-for="(type, name) in types" :key="name">
         <div class="flex flex-col items-center justify-center m-4">
           <img

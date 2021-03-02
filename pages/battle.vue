@@ -1,9 +1,11 @@
 <template>
   <div class="h-full flex flex-col justify-start">
-    <header-base class="mb-10" name="Batalha" />
+    <header-base class="mb-6 md:mb-10" name="Batalha" />
 
     <div v-if="battle" class="flex flex-col items-center">
-      <div class="mb-12 w-full flex justify-between items-center px-32">
+      <div
+        class="md:mb-12 w-full flex flex-col md:flex-row justify-between items-center px-32"
+      >
         <div class="h-full flex flex-col items-center justify-center">
           <div class="w-full flex justify-end">
             <icon
@@ -17,7 +19,7 @@
           <img
             @click="handleClick(pokemon0.indice, 0)"
             class="mb-2 cursor-pointer"
-            style="max-height: 220px"
+            style="max-height: 220px; min-width: 120px"
             :src="
               pokemon0.sprite == ''
                 ? require(`~/assets/pokebola.png`)
@@ -31,7 +33,11 @@
             {{ pokemon0.nome }}
           </p>
         </div>
-        <img src="~/assets/vs.png" />
+        <img
+          class="md:m-0 my-5"
+          style="min-width: 100px"
+          src="~/assets/vs.png"
+        />
         <div class="h-full flex flex-col items-center justify-center">
           <div class="w-full flex justify-end">
             <icon
@@ -45,7 +51,7 @@
           <img
             @click="handleClick(pokemon1.indice, 1)"
             class="mb-2 cursor-pointer"
-            style="max-height: 220px"
+            style="max-height: 220px; min-width: 120px"
             :src="
               pokemon1.sprite == ''
                 ? require(`~/assets/pokebola.png`)
@@ -68,13 +74,13 @@
             ? 'bg-gray-500 hover:bg-gray-300'
             : 'bg-gray-300'
         "
-        class="w-56 h-12 flex items-center justify-center rounded-full focus:outline-none"
+        class="w-56 h-12 flex items-center justify-center rounded-full focus:outline-none my-2"
       >
         <p v-if="!loading">Go!</p>
         <icon v-else name="loading" size="30" class="animate-spin" />
       </button>
     </div>
-    <div v-else class="px-40">
+    <div v-else class="md:px-40">
       <div class="flex items-center justify-between">
         <div class="flex flex-col items-center justify-end h-full">
           <img

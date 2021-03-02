@@ -1,7 +1,7 @@
 <template>
   <div class="h-full flex flex-col">
     <header-base name="time" />
-    <div class="mt-12 grid grid-cols-3">
+    <div class="mt-12 grid grid-cols-1 md:grid-cols-3">
       <div v-for="(t, i) in myteam" :key="i">
         <div class="h-full flex flex-col items-center justify-between">
           <div class="w-full flex justify-end pr-16">
