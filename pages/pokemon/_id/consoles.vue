@@ -10,7 +10,7 @@
       <h1 class="mt-2 text-3xl font-lato font-bold uppercase mb-5">Jogos</h1>
     </div>
     <div class="h-full flex justify-center overflow-y-hidden">
-      <div class="w-1/2 flex flex-col items-center justify-center">
+      <div class="w-1/2 hidden md:flex flex-col items-center justify-center">
         <h1
           class="mt-2 text-3xl font-lato font-bold uppercase mb-5"
           :style="{ color: pokemon.color }"
@@ -24,10 +24,8 @@
           :src="pokemon.sprite"
         />
       </div>
-      <div class="w-1/2 flex flex-col pl-24 overflow-y-auto">
-        <div v-for="game in pokemon.games" :key="game">
-          <game-card :game="game" />
-        </div>
+      <div class="md:w-1/2 flex flex-col md:pl-24 overflow-y-auto">
+        <game-card v-for="game in pokemon.games" :key="game" :game="game" />
       </div>
     </div>
     <div class="flex justify-center">

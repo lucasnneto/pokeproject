@@ -3,7 +3,9 @@
     <div class="flex justify-center mb-10">
       <h1 class="text-4xl font-lato font-bold mb-2 uppercase">PokeAgenda</h1>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 justify-items-center mb-8">
+    <div
+      class="grid grid-cols-1 md:grid-cols-3 justify-items-center mb-0 md:mb-8"
+    >
       <card @click="handleCard('pokemon')" class="cursor-pointer">
         <template v-slot:body>
           <div class="h-full flex flex-col items-center justify-between">

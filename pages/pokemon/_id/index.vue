@@ -9,7 +9,7 @@
           <icon name="back" size="20" />
         </button>
       </div>
-      <div class="flex justify-center">
+      <div class="justify-center hidden md:flex">
         <img
           v-for="type in pokemon.types"
           :key="type"
@@ -19,8 +19,16 @@
           style="min-width: 68px !important"
         />
       </div>
+      <div class="md:hidden flex justify-center">
+        <h1
+          class="mt-2 text-3xl font-lato font-bold uppercase"
+          :style="{ color: pokemon.color }"
+        >
+          {{ pokemon.name }}
+        </h1>
+      </div>
     </div>
-    <div class="flex justify-center">
+    <div class="hidden md:flex justify-center">
       <h1
         class="mt-2 text-3xl font-lato font-bold uppercase"
         :style="{ color: pokemon.color }"
@@ -37,31 +45,29 @@
       class="relative flex flex-col justify-end items-center"
       style="height: 70%"
     >
-      <img
-        class="mb-3 absolute top-0"
-        style="
-          max-height: 200px !important;
-          min-height: 170px !important;
-          max-width: 350px !important;
-        "
-        :src="pokemon.sprite"
-      />
-      <icon
-        name="back"
-        color="#A9A9A9"
-        class="transform rotate-180 flex items-center px-5 absolute right-0 top-0 cursor-pointer"
-        @click="handleNavigatePokemon('next')"
-      />
-      <icon
-        name="back"
-        color="#A9A9A9"
-        class="flex items-center px-5 absolute left-0 top-0 cursor-pointer"
-        @click="handleNavigatePokemon('previous')"
-      />
+      <div
+        class="md:absolute md:top-0 flex w-full justify-between items-center md:items-start"
+      >
+        <icon
+          name="back"
+          color="#A9A9A9"
+          class="flex items-center px-5 cursor-pointer"
+          @click="handleNavigatePokemon('previous')"
+        />
+        <img class="mb-3 pokeImg" :src="pokemon.sprite" />
+        <icon
+          name="back"
+          color="#A9A9A9"
+          class="transform rotate-180 flex items-center px-5 cursor-pointer"
+          @click="handleNavigatePokemon('next')"
+        />
+      </div>
       <card width="100%" height="75%">
         <template v-slot:body>
-          <div class="flex h-full">
-            <div class="flex flex-col items-start w-1/3">
+          <div class="flex flex-col md:flex-row h-full">
+            <div
+              class="grid grid-cols-2 md:flex flex-col items-start w-auto md:w-1/3"
+            >
               <div
                 v-for="status in pokemon.status"
                 :key="status.name"
@@ -70,7 +76,7 @@
                 <p class="font-lato text-xs font-thin">{{ status.name }}</p>
                 <p class="font-lato font-bold">{{ status.value }}</p>
               </div>
-              <div>
+              <div class="col-span-2">
                 <p class="font-lato text-xs font-thin">Tipo</p>
                 <p class="font-lato font-bold">
                   <span v-for="(type, index) in pokemon.types" :key="index">
@@ -82,7 +88,7 @@
                 </p>
               </div>
             </div>
-            <div class="flex items-end justify-center w-1/3">
+            <div class="flex items-end justify-center w-auto md:w-1/3">
               <div
                 style="height: 50%"
                 class="w-full flex items-center justify-center"
@@ -98,24 +104,20 @@
                     <icon
                       v-show="nivel - 1 != 0"
                       name="back"
+                      size="20"
                       color="#A9A9A9"
                       class="transform rotate-180 flex items-center px-5"
                     />
                     <div @click="handlePokemon(evol.id)" class="cursor-pointer">
-                      <img
-                        style="
-                          min-height: 60px !important;
-                          max-height: 60px !important;
-                          min-width: 60px !important;
-                        "
-                        :src="evol.sprite"
-                      />
+                      <img class="pokeEvols" :src="evol.sprite" />
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="flex flex-col py-10 items-center w-1/3">
+            <div
+              class="md:flex flex-col py-10 items-center w-auto md:w-1/3 hidden"
+            >
               <p class="w-4/5 font-lato text-justify text-gray-700">
                 {{ pokemon.text }}
               </p>
@@ -234,10 +236,6 @@ export default class id extends Vue {
         color: color.name == "white" ? "gray" : color.name,
         status: [
           {
-            name: "Experiência Base",
-            value: pkm.base_experience,
-          },
-          {
             name: "Vida Base",
             value: this.getStatus(pkm.stats, "hp"),
           },
@@ -277,3 +275,25 @@ export default class id extends Vue {
   }
 }
 </script>
+<style scoped>
+.pokeImg {
+  max-height: 80px !important;
+}
+.pokeEvols {
+  min-height: 40px !important;
+  max-height: 40px !important;
+  min-width: 40px !important;
+}
+@media (min-width: 768px) {
+  .pokeImg {
+    max-height: 200px !important;
+    min-height: 170px !important;
+    max-width: 350px !important;
+  }
+  .pokeEvols {
+    min-height: 70px !important;
+    max-height: 70px !important;
+    min-width: 70px !important;
+  }
+}
+</style>

@@ -23,7 +23,7 @@
     </div>
     <div class="flex flex-col justify-start overflow-y-hidden">
       <div
-        class="grid grid-cols-3 justify-items-center px-10 overflow-y-auto"
+        class="grid grid-cols-1 md:grid-cols-3 justify-items-center px-10 overflow-y-auto"
         id="infinite-list"
       >
         <pokemon-card
