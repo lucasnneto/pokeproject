@@ -26,6 +26,12 @@
       </div>
       <div class="md:w-1/2 flex flex-col md:pl-24 overflow-y-auto">
         <game-card v-for="game in pokemon.games" :key="game" :game="game" />
+        <div
+          v-if="pokemon.games.length === 0"
+          class="h-full text-center flex items-center justify-center"
+        >
+          Esse pokemon não tem jogos registados!
+        </div>
       </div>
     </div>
     <div class="flex justify-center">
@@ -43,7 +49,9 @@
 import { Component, Vue } from "vue-property-decorator";
 @Component
 export default class games extends Vue {
-  private pokemon: any = {};
+  private pokemon: any = {
+    games: [],
+  };
 
   private handleNavigate(route: string): void {
     this.$router.push(route);

@@ -32,6 +32,12 @@
         >
           <city-card :areaUrl="local" />
         </div>
+        <div
+          v-if="pokemon.local.length === 0"
+          class="h-full text-center flex items-center justify-center"
+        >
+          Esse pokemon não tem cidades registadas!
+        </div>
       </div>
     </div>
   </div>
@@ -41,7 +47,9 @@
 import { Component, Vue } from "vue-property-decorator";
 @Component
 export default class citys extends Vue {
-  private pokemon: any = {};
+  private pokemon: any = {
+    local: [],
+  };
   private handleNavigate(route: string): void {
     this.$router.push(route);
   }
