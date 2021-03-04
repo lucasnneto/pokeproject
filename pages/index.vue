@@ -1,7 +1,7 @@
 <template>
   <div class="h-full flex flex-col">
     <div class="flex justify-center mb-10">
-      <h1 class="text-4xl font-lato font-bold mb-2 uppercase">PokeAgenda</h1>
+      <h1 class="text-4xl font-lato font-bold mb-2 uppercase">PokeProject</h1>
     </div>
     <div
       class="grid grid-cols-1 md:grid-cols-3 justify-items-center mb-0 md:mb-8"
@@ -12,7 +12,14 @@
             <p class="mb-3 font-lato font-semibold text-2xl uppercase">
               Pokémon
             </p>
+            <icon
+              name="loading"
+              v-if="loading"
+              size="120"
+              class="animate-spin"
+            />
             <img
+              v-else
               class="w-3/4 mb-3"
               style="max-height: 160px !important"
               :src="pokemon.sprite"
@@ -24,7 +31,7 @@
         <template v-slot:body>
           <div class="h-full flex flex-col items-center justify-between">
             <p class="mb-3 font-lato font-semibold text-2xl uppercase">
-              Batalha
+              Comparativo
             </p>
             <img class="w-1/2 mb-3" src="@/assets/vs.png" />
           </div>
@@ -51,7 +58,14 @@
         <template v-slot:body>
           <div class="h-full flex flex-col items-center justify-between">
             <p class="mb-3 font-lato font-semibold text-2xl uppercase">Tipo</p>
+            <icon
+              name="loading"
+              v-if="loading"
+              size="70"
+              class="animate-spin"
+            />
             <img
+              v-else
               class="w-3/5 mb-3"
               :src="require(`~/assets/tipos/${pokemon.url}.png`)"
             />
@@ -67,7 +81,7 @@
         <template v-slot:body>
           <div class="h-full flex flex-col items-center justify-between">
             <p class="mb-3 font-lato font-semibold text-2xl uppercase">sobre</p>
-            <img class="w-1/2 mb-3" src="@/assets/pokedex.png" />
+            <img class="w-1/2 mb-3" src="~/assets/pokedex.png" />
           </div>
         </template>
       </card>
@@ -77,19 +91,21 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import card from "@/components/card.vue";
 import { types } from "@/utils/type";
-@Component({
-  components: {
-    card,
-  },
-})
+type PokemonState = {
+  sprite: string;
+  url: string;
+};
+@Component
 export default class Index extends Vue {
-  private pokemon: any = {
+  private pokemon: PokemonState = {
+    sprite: "",
     url: "planta",
   };
-  async mounted() {
-    const index = Math.floor(Math.random() * (898 - 1)) + 1;
+  private loading: boolean = false;
+  async created(): Promise<void> {
+    this.loading = true;
+    const index: number = Math.floor(Math.random() * (898 - 1)) + 1;
     try {
       const pkm = await this.$axios.$get(
         `https://pokeapi.co/api/v2/pokemon/${index}/`
@@ -98,12 +114,13 @@ export default class Index extends Vue {
         sprite:
           pkm.sprites.other.dream_world.front_default ??
           pkm.sprites.other["official-artwork"].front_default,
-        type: pkm.types[0].type.name,
         url: types[pkm.types[0].type.name].namesimple,
       };
       // console.log(this.pokemon);
     } catch (e) {
       console.error(e);
+    } finally {
+      this.loading = false;
     }
   }
   private handleCard(router: string): void {

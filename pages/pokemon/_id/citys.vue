@@ -45,16 +45,27 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+interface PokemonType {
+  name: string;
+  id: string;
+  color: string;
+  sprite: string;
+  local: Array<string>;
+}
 @Component
 export default class citys extends Vue {
-  private pokemon: any = {
+  private pokemon: PokemonType = {
+    id: "",
+    name: "",
+    color: "",
+    sprite: "",
     local: [],
   };
   private handleNavigate(route: string): void {
     this.$router.push(route);
   }
-  async mounted() {
-    const id = this.$route.params.id;
+  async mounted(): Promise<void> {
+    const id: string = this.$route.params.id;
     try {
       const { color } = await this.$axios.$get(
         `https://pokeapi.co/api/v2/pokemon-species/${id}/`

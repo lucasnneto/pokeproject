@@ -151,12 +151,30 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { types } from "@/utils/type";
+import { types, Typetype, TypesType } from "@/utils/type";
+type evolutionType = {
+  id: string;
+  name: string;
+  sprite: string;
+  nivel: number;
+};
+type statusType = {
+  name: string;
+  value: number;
+};
+interface PokemonType {
+  name: string;
+  id: string;
+  sprite: string;
+  text: string;
+  color: string;
+  status: Array<statusType>;
+}
 @Component
 export default class id extends Vue {
-  private types: { [key: string]: any } = types;
+  private types: TypesType = types;
   private pokemon: any = {};
-  private evolutions: Array<object> = [];
+  private evolutions: Array<evolutionType> = [];
   private nivel: number = 0;
   private handlePokemon(id: string): void {
     this.$router.push(`/pokemon/${id}`);
@@ -165,21 +183,21 @@ export default class id extends Vue {
     this.$router.push(route);
   }
   private handleNavigatePokemon(destiny: string): void {
-    let id = 0;
+    let id: number = 0;
     if (destiny == "next" && this.pokemon.id + 1 <= 888)
       id = this.pokemon.id + 1;
     else if (destiny == "previous" && this.pokemon.id - 1 > 0)
       id = this.pokemon.id - 1;
     if (id != 0) this.$router.push("/pokemon/" + id);
   }
-  private getStatus(status: any, value: string) {
+  private getStatus(status: any, value: string): number {
     const aux = status.find((el: any) => el.stat.name === value);
     return aux.base_stat;
   }
   private handleClickType(type: string): void {
     this.$router.push(`/type/${type}`);
   }
-  private getEvolution(poke: any, nivel: number) {
+  private getEvolution(poke: any, nivel: number): void {
     this.evolutions.push({
       id: poke.species.url.split("/")[6],
       name: poke.species.name,
@@ -189,16 +207,16 @@ export default class id extends Vue {
     if (poke.species.name == "eevee") return;
     if (poke.evolves_to.length > 0) {
       this.nivel++;
-      const lvl = this.nivel;
-      let i = 0;
+      const lvl: number = this.nivel;
+      let i: number = 0;
       while (i < poke.evolves_to.length) {
         this.getEvolution(poke.evolves_to[i], nivel + 1);
         i++;
       }
     } else return;
   }
-  async mounted() {
-    const id = this.$route.params.id;
+  async mounted(): Promise<void> {
+    const id: string = this.$route.params.id;
     try {
       const {
         evolution_chain,
@@ -211,7 +229,7 @@ export default class id extends Vue {
       this.getEvolution(chain, 0);
 
       for (let index = 0; index < this.evolutions.length; index++) {
-        const aux: any = this.evolutions[index];
+        const aux: evolutionType = this.evolutions[index];
         const pkm = await this.$axios.$get(
           `https://pokeapi.co/api/v2/pokemon/${aux.id}/`
         );
@@ -263,10 +281,9 @@ export default class id extends Vue {
       console.error(error);
     }
   }
-  get type(): string {
+  get type(): Typetype {
     return types[this.$route.params.name];
   }
-
   private convertName(type: string): string {
     return types[type].namesimple;
   }
