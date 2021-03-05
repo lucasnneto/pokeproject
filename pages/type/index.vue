@@ -18,17 +18,13 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { types } from "@/utils/type";
-import headerBase from "@/components/headerBase.vue";
-@Component({
-  components: {
-    headerBase,
-  },
-})
+import { types, TypesType } from "@/utils/type";
+
+@Component
 export default class IndexType extends Vue {
   private modal: boolean = false;
   private itemModal: String = "";
-  private types: { [key: string]: any } = types;
+  private types: TypesType = types;
   private handleClick(type: string): void {
     this.$router.push(`type/${type}`);
   }

@@ -1,6 +1,6 @@
 <template>
   <div class="h-full flex flex-col justify-start">
-    <header-base class="mb-6 md:mb-10" name="Batalha" />
+    <header-base class="mb-6 md:mb-10" name="Comparativo" />
 
     <div v-if="battle" class="flex flex-col items-center">
       <div
@@ -18,7 +18,8 @@
           </div>
           <img
             @click="handleClick(pokemon0.indice, 0)"
-            class="mb-2 cursor-pointer"
+            class="mb-2"
+            :class="{ 'cursor-pointer': pokemon0.nome == '' }"
             style="max-height: 220px; min-width: 120px"
             :src="
               pokemon0.sprite == ''
@@ -130,6 +131,43 @@
 <script lang='ts'>
 import { Component, Vue } from "vue-property-decorator";
 import { types } from "@/utils/type";
+type moveType = {
+  name: string;
+  url: string;
+};
+type statsType = {
+  hp: number;
+  attack: number;
+  defense: number;
+  spattack: number;
+  spdefense: number;
+  speed: number;
+};
+interface PokemonType {
+  sprite: string;
+  indice: string;
+  nome: string;
+  skils: Array<any>;
+  moves: Array<moveType>;
+  stats: statsType;
+  types: Array<string>;
+}
+const PokemonIncial: PokemonType = {
+  sprite: "",
+  indice: "-1",
+  nome: "",
+  moves: [],
+  skils: [],
+  stats: {
+    hp: 0,
+    attack: 0,
+    defense: 0,
+    spattack: 0,
+    spdefense: 0,
+    speed: 0,
+  },
+  types: [],
+};
 @Component
 export default class ListaPokemon extends Vue {
   private battle: boolean = true;
@@ -137,22 +175,10 @@ export default class ListaPokemon extends Vue {
   private percent: number = 0;
   private loading: boolean = false;
   private direction: number = -1;
-  private pokemons: Array<object> = [];
-  private pokemon0: any = {
-    sprite: "",
-    indice: "-1",
-    nome: "",
-    moves: [],
-    skils: [],
-  };
-  private pokemon1: any = {
-    sprite: "",
-    indice: "-1",
-    nome: "",
-    moves: [],
-    skils: [],
-  };
-  private getStatus(status: any, value: string) {
+  private pokemons: Array<PokemonType> = [];
+  private pokemon0: PokemonType = PokemonIncial;
+  private pokemon1: PokemonType = PokemonIncial;
+  private getStatus(status: any, value: string): number {
     const aux = status.find((el: any) => el.stat.name === value);
     return aux.base_stat;
   }
@@ -161,13 +187,15 @@ export default class ListaPokemon extends Vue {
       const pkm = await this.$axios.$get(
         `https://pokeapi.co/api/v2/pokemon/${indice}/`
       );
-      const poke = {
+      const poke: PokemonType = {
         sprite:
           pkm.sprites.other.dream_world.front_default ??
           pkm.sprites.other["official-artwork"].front_default,
         nome: pkm.forms[0].name,
         indice: indice,
-        moves: pkm.moves,
+        moves: pkm.moves.map((el: any) => {
+          return { ...el.move };
+        }),
         stats: {
           hp: this.getStatus(pkm.stats, "hp"),
           attack: this.getStatus(pkm.stats, "attack"),
@@ -190,14 +218,12 @@ export default class ListaPokemon extends Vue {
       this.loading = true;
       this.pokemon0.skils = [];
       this.pokemon1.skils = [];
-      const qtd1 =
+      const qtd1: number =
         this.pokemon0.moves.length > 20 ? 20 : this.pokemon0.moves.length;
       for (let index = 0; index < qtd1; index++) {
         const random = Math.floor(Math.random() * this.pokemon0.moves.length);
         try {
-          const pkm = await this.$axios.$get(
-            this.pokemon0.moves[random].move.url
-          );
+          const pkm = await this.$axios.$get(this.pokemon0.moves[random].url);
 
           this.pokemon0.skils.push(pkm);
         } catch (error) {
@@ -205,14 +231,12 @@ export default class ListaPokemon extends Vue {
         }
       }
 
-      const qtd2 =
+      const qtd2: number =
         this.pokemon1.moves.length > 20 ? 20 : this.pokemon1.moves.length;
       for (let index = 0; index < qtd2; index++) {
         const random = Math.floor(Math.random() * this.pokemon1.moves.length);
         try {
-          const pkm = await this.$axios.$get(
-            this.pokemon1.moves[random].move.url
-          );
+          const pkm = await this.$axios.$get(this.pokemon1.moves[random].url);
           this.pokemon1.skils.push(pkm);
         } catch (error) {
           console.error(error);
@@ -222,7 +246,7 @@ export default class ListaPokemon extends Vue {
       const skilsCalculadas1: Array<number> = [];
       this.pokemon0.skils.forEach((el: any) => {
         if (el.damage_class.name != "status") {
-          const { attack, defense } =
+          const { attack, defense }: { attack: number; defense: number } =
             el.damage_class.name == "physical"
               ? {
                   attack: this.pokemon0.stats.attack,
@@ -233,13 +257,13 @@ export default class ListaPokemon extends Vue {
                   defense: this.pokemon1.stats.spdefense,
                 };
 
-          const stab =
+          const stab: number =
             this.pokemon0.types.filter(
               (element: string) => element == el.type.name
             ).length > 0
               ? 1.5
               : 1;
-          const wr = this.pokemon1.types.reduce(
+          const wr: number = this.pokemon1.types.reduce(
             (acc: number, element: string) => {
               const valor =
                 types[element].vantagem.filter(
@@ -259,14 +283,15 @@ export default class ListaPokemon extends Vue {
             },
             1
           );
-          const power = el.power == null ? 0 : el.power;
-          const value = ((attack * el.power) / (25 * defense) + 2) * stab * wr;
+          const power: number = el.power == null ? 0 : el.power;
+          const value: number =
+            ((attack * el.power) / (25 * defense) + 2) * stab * wr;
           skilsCalculadas0.push(value);
         }
       });
       this.pokemon1.skils.forEach((el: any) => {
         if (el.damage_class.name != "status") {
-          const { attack, defense } =
+          const { attack, defense }: { attack: number; defense: number } =
             el.damage_class.name == "physical"
               ? {
                   attack: this.pokemon1.stats.attack,
@@ -277,13 +302,13 @@ export default class ListaPokemon extends Vue {
                   defense: this.pokemon0.stats.spdefense,
                 };
 
-          const stab =
+          const stab: number =
             this.pokemon1.types.filter(
               (element: string) => element == el.type.name
             ).length > 0
               ? 1.5
               : 1;
-          const wr = this.pokemon0.types.reduce(
+          const wr: number = this.pokemon0.types.reduce(
             (acc: number, element: string) => {
               const valor =
                 types[element].vantagem.filter(
@@ -303,15 +328,16 @@ export default class ListaPokemon extends Vue {
             },
             1
           );
-          const power = el.power == null ? 0 : el.power;
-          const value = ((attack * el.power) / (25 * defense) + 2) * stab * wr;
+          const power: number = el.power == null ? 0 : el.power;
+          const value: number =
+            ((attack * el.power) / (25 * defense) + 2) * stab * wr;
           skilsCalculadas1.push(value);
         }
       });
-      const m0 =
+      const m0: number =
         skilsCalculadas0.reduce((acc: number, el: number) => el + acc, 1) /
         skilsCalculadas0.length;
-      const m1 =
+      const m1: number =
         skilsCalculadas1.reduce((acc: number, el: number) => el + acc, 1) /
         skilsCalculadas1.length;
       if (m0 > m1) {
@@ -332,22 +358,14 @@ export default class ListaPokemon extends Vue {
   private handleClick(indice: string, direction: number): void {
     this.direction = direction;
     if (indice == "-1") this.modal = true;
-    // this.$router.push(`/pokemon/${indice}`);
+    else if (!this.battle) this.$router.push(`/pokemon/${indice}`);
   }
   private removePoke(indice: number): void {
     if (indice == 0) {
-      this.pokemon0 = {
-        sprite: "",
-        indice: "-1",
-        nome: "",
-      };
+      this.pokemon0 = PokemonIncial;
       this.pokemons.splice(0, 1);
     } else {
-      this.pokemon1 = {
-        sprite: "",
-        indice: "-1",
-        nome: "",
-      };
+      this.pokemon1 = PokemonIncial;
       this.pokemons.splice(1, 1);
     }
   }

@@ -63,16 +63,11 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import Icon from "@/components/Icon/index.vue";
-import { types } from "@/utils/type";
-@Component({
-  components: {
-    Icon,
-  },
-})
+import { types, Typetype, TypesType } from "@/utils/type";
+@Component
 export default class name extends Vue {
-  private types: { [key: string]: any } = types;
-  get type(): string {
+  private types: TypesType = types;
+  get type(): Typetype {
     return types[this.$route.params.name];
   }
   private handleClick(type: string): void {

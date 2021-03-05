@@ -1,4 +1,15 @@
-export const types: { [key: string]: any } = {
+export interface Typetype {
+  namesimple: string;
+  name: string;
+  vantagem: Array<string>;
+  desvantagem: Array<string>;
+  imunidade: Array<string>
+}
+export interface TypesType {
+  [key: string]: Typetype
+}
+
+export const types: TypesType = {
   'fighting': {
     namesimple: "lutador",
     name: "Lutador",

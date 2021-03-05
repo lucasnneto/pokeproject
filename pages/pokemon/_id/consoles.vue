@@ -26,6 +26,12 @@
       </div>
       <div class="md:w-1/2 flex flex-col md:pl-24 overflow-y-auto">
         <game-card v-for="game in pokemon.games" :key="game" :game="game" />
+        <div
+          v-if="pokemon.games.length === 0"
+          class="h-full text-center flex items-center justify-center"
+        >
+          Esse pokemon não tem jogos registados!
+        </div>
       </div>
     </div>
     <div class="flex justify-center">
@@ -41,15 +47,28 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+interface PokemonType {
+  name: string;
+  id: string;
+  color: string;
+  sprite: string;
+  games: Array<string>;
+}
 @Component
 export default class games extends Vue {
-  private pokemon: any = {};
+  private pokemon: PokemonType = {
+    id: "",
+    name: "",
+    color: "",
+    sprite: "",
+    games: [],
+  };
 
   private handleNavigate(route: string): void {
     this.$router.push(route);
   }
-  async mounted() {
-    const id = this.$route.params.id;
+  async mounted(): Promise<void> {
+    const id: string = this.$route.params.id;
     try {
       const { color } = await this.$axios.$get(
         `https://pokeapi.co/api/v2/pokemon-species/${id}/`

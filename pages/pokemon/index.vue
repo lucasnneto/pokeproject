@@ -8,12 +8,7 @@
 
 <script lang='ts'>
 import { Component, Vue } from "vue-property-decorator";
-import pokemonList from "@/components/pokemonList.vue";
-@Component({
-  components: {
-    pokemonList,
-  },
-})
+@Component
 export default class ListaPokemon extends Vue {
   private back(): void {
     this.$router.push("/");
