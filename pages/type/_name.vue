@@ -3,7 +3,7 @@
     <header-base :name="type.name" class="mb-5" />
     <div
       style="height: 70%"
-      class="flex flex-col md:flex-row justify-start items-center"
+      class="flex flex-col md:flex-row justify-between items-center"
     >
       <div
         class="flex flex-col items-center"
